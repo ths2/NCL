@@ -3,17 +3,23 @@
 <ncl id="PrimeiroJoao" xmlns="http://www.ncl.org.br/NCL3.0/EDTVProfile">
 	<head>
 		
-		<regionBase>
+		<regionBase>	
+			<region id="backgroungReg" width="100%" height="100%" zIndex="1"/>		
 			<region id="screemReg" width="100%" height="100%" zIndex="2">
 				<region id="frameReg" left="5%" top="6.7%" width="18.5%" height="18.5%" zIndex="3"/>
+				<region id="iconReg" left="87.5%" top="11.7%" width="8.45%" height="6.7%" zIndex="3"/>
+				<region id="shoesReg" left="15%" top="60%" width="25%" height="25%" zIndex="3"/>
 			</region>				
-		</regionBase>		
+		</regionBase>
 		
 		<descriptorBase>
+			<descriptor id="backgroundDesc" region="backgroungReg"/>
 			<descriptor id="screemDesc" region="screemReg"/>
 			<descriptor id="photoDesc" region="frameReg" explicitDur="5s"/>
 			<descriptor id="audioDesc"/>
 			<descriptor id="dribleDesc" region="frameReg"/>
+			<descriptor id="iconDesc" region="iconReg" explicitDur="6s"/>
+			<descriptor id="shoesDesc" region="shoesReg"/>
 		</descriptorBase>
 		
 		<connectorBase>
@@ -26,19 +32,31 @@
 		
 		<port id="entry" component="animation"/>
 		
+		<media id="background" src="./media/background.png" descriptor="backgroundDesc"/>
+			
 		<media id="animation" src="./media/animGar.mp4" descriptor="screemDesc">
 			<area id="segDrible" begin="12s"/>
-			<area id="segPhoto" begin="41s"/>			
+			<area id="segPhoto" begin="41s"/>	
+			<area id="segIcon" begin="45s" end="51s"/>	
+			<property name="bounds"/>	
 		</media>
 		
 		<media id="choro" src="./media/choro.mp4" descriptor="audioDesc"/>
 		
 		<media id="drible" src="./media/drible.mp4" descriptor="dribleDesc"/>
 			
-		<media id="photo" src="./media/photo.png" descriptor="photoDesc"/>		
+		<media id="photo" src="./media/photo.png" descriptor="photoDesc"/>	
+		
+		<media id="icon" src="./media/icon.png" descriptor="iconDesc"/>
+		
+		<media id="shoes" src="./media/shoes.mp4" descriptor="shoesDesc"/>
+			
 
 		<link id="lMusic" xconnector="conEx#onBeginStart_delay"><!--Define Relacionamentos-->
 			<bind role="onBegin" component="animation"/>
+			<bind role="start" component="background">
+				<bindParam name="delay" value="5s"/>
+			</bind>
 			<bind role="start" component="choro">
 				<bindParam name="delay" value="5s"/>
 			</bind>			
@@ -56,8 +74,34 @@
 		
 		<link id="lEnd" xconnector="conEx#onEndStop">
 			<bind role="onEnd" component="animation"/>
+			<bind role="stop" component="background"/>
 			<bind role="stop" component="choro"/>
-		</link>			
+		</link>	
+
+		<link id="lIcon" xconnector="conEx#onBeginStart">
+			<bind role="onBegin" component="animation" interface="segIcon"/>
+			<bind role="start" component="icon" />			
+		</link>	
+		
+		<link id="lAdvert" xconnector="conEx#onKeySelectionStopSet_varStart">
+			<bind role="onSelection" component="icon">
+				<bindParam name="keyCode" value="RED"/>
+			</bind>		
+			<bind role="stop" component="icon" />		
+			<bind role="set" component="animation" interface="bounds">
+				<bindParam name="var" value="5%,6.67%,45%,45%"/>
+			</bind>				
+			<bind role="start" component="shoes" />	
+				
+		</link>	
+		
+		<link id="lEndAdvert" xconnector="conEx#onEndSet_var">
+			<bind role="onEnd" component="shoes" />
+			<bind role="set" component="animation" interface="bounds">
+				<bindParam name="var" value="0,0,100%,100%"/>
+			</bind>
+				
 			
+		</link>
 	</body>
 </ncl>

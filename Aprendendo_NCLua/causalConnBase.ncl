@@ -3,8 +3,8 @@
 <ncl id="causalConnBase" xmlns="http://www.ncl.org.br/NCL3.0/EDTVProfile">
 	<head>
 		
-		<connectorBase> <!--Partes Reusáveis-->
-			
+		<connectorBase> <!--Partes Reusáveis-->	
+					
 			<causalConnector id="onBeginStart_delay">
 				<connectorParam name="delay"/>
 				<simpleCondition role="onBegin" />
@@ -20,6 +20,24 @@
 				<simpleCondition role="onEnd" />
 				<simpleAction role="stop" max="unbounded" qualifier="par" />
 			</causalConnector>
+			
+			<causalConnector id="onKeySelectionStopSet_varStart">
+				<connectorParam name="var"/>
+				<connectorParam name="keyCode"/>
+				<simpleCondition role="onSelection" key="$keyCode"/>
+				<compoundAction operator="seq">
+					<simpleAction role="stop" max="unbounded" qualifier="par"/>
+					<simpleAction role="set" value="$var"/>
+					<simpleAction role="start" max="unbounded" qualifier="par"/>
+				</compoundAction>
+			</causalConnector>	
+			
+			<causalConnector id="onEndSet_var">
+				<connectorParam name="var"/>
+				<simpleCondition role="onEnd"/>
+				<simpleAction role="set" value="$var"/>
+			</causalConnector>	
+			
 		</connectorBase>
 		
 	</head>
