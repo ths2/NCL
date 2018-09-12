@@ -3,23 +3,21 @@
 <ncl id="PrimeiroJoao" xmlns="http://www.ncl.org.br/NCL3.0/EDTVProfile">
 	<head>
 		
-		<connectorBase> <!--Partes Reusáveis-->
-			
-			<causalConnector id="onBeginStart_delay">
-				<connectorParam name="delay"/>
-				<simpleCondition role="onBegin" />
-				<simpleAction role="start" delay="$delay" max="unbounded" qualifier="par"/>
-			</causalConnector>
-			
-			<causalConnector id="onBeginStart">
-				<simpleCondition role="onBegin" />
-				<simpleAction role="start" max="unbounded" qualifier="par" />
-			</causalConnector>
-			
-			<causalConnector id="onEndStop">
-				<simpleCondition role="onEnd" />
-				<simpleAction role="stop" max="unbounded" qualifier="par" />
-			</causalConnector>
+		<regionBase>
+			<region id="screemReg" width="100%" height="100%" zIndex="2">
+				<region id="frameReg" left="5%" top="6.7%" width="18.5%" height="18.5%" zIndex="3"/>
+			</region>				
+		</regionBase>		
+		
+		<descriptorBase>
+			<descriptor id="screemDesc" region="screemReg"/>
+			<descriptor id="photoDesc" region="frameReg" explicitDur="5s"/>
+			<descriptor id="audioDesc"/>
+			<descriptor id="dribleDesc" region="frameReg"/>
+		</descriptorBase>
+		
+		<connectorBase>
+			<importBase documentURI="./causalConnBase.ncl" alias="conEx"/>
 		</connectorBase>
 
 	</head>
@@ -28,52 +26,35 @@
 		
 		<port id="entry" component="animation"/>
 		
-		<media id="animation" src="./media/animGar.mp4">
+		<media id="animation" src="./media/animGar.mp4" descriptor="screemDesc">
 			<area id="segDrible" begin="12s"/>
-			<area id="segPhoto" begin="41s"/>
-			<property name="width" value="100%"/>
-			<property name="height" value="100%"/>
-			<property name="zIndex" value="2"/>
+			<area id="segPhoto" begin="41s"/>			
 		</media>
 		
-		<media id="choro" src="./media/choro.mp4"/>
+		<media id="choro" src="./media/choro.mp4" descriptor="audioDesc"/>
 		
-		<media id="drible" src="./media/drible.mp4">
-			<property name="left" value="5%"/>
-			<property name="top" value="6.7%"/>
-			<property name="width" value="18.5%"/>
-			<property name="height" value="18.5%"/>
-			<property name="zIndex" value="3"/>
-		</media>
+		<media id="drible" src="./media/drible.mp4" descriptor="dribleDesc"/>
 			
-		<media id="photo" src="./media/photo.png">
-			<property name="left" value="5%"/>
-			<property name="top" value="6.7%"/>			
-			<property name="width" value="18.5%"/>
-			<property name="height" value="18.5%"/>
-			<property name="zIndex" value="3"/> <!--Sobreposição dos objeto-->
-			<property name="explicitDur" value="5s"/> <!--Tempo que a imagem fica em execução-->
-		</media>
-		
+		<media id="photo" src="./media/photo.png" descriptor="photoDesc"/>		
 
-		<link id="lMusic" xconnector="onBeginStart_delay"><!--Define Relacionamentos-->
+		<link id="lMusic" xconnector="conEx#onBeginStart_delay"><!--Define Relacionamentos-->
 			<bind role="onBegin" component="animation"/>
 			<bind role="start" component="choro">
 				<bindParam name="delay" value="5s"/>
 			</bind>			
 		</link>
 		
-		<link id="lDrible" xconnector="onBeginStart">
+		<link id="lDrible" xconnector="conEx#onBeginStart">
 			<bind role="onBegin" component="animation" interface="segDrible"/>
 			<bind role="start" component="drible"/>
 		</link>
 		
-		<link id="lPhoto" xconnector="onBeginStart">
+		<link id="lPhoto" xconnector="conEx#onBeginStart">
 			<bind role="onBegin" component="animation" interface="segPhoto"/>
 			<bind role="start" component="photo"/>
 		</link>
 		
-		<link id="lEnd" xconnector="onEndStop">
+		<link id="lEnd" xconnector="conEx#onEndStop">
 			<bind role="onEnd" component="animation"/>
 			<bind role="stop" component="choro"/>
 		</link>			
