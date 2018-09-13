@@ -46,11 +46,25 @@
 		<media id="drible" src="./media/drible.mp4" descriptor="dribleDesc"/>
 			
 		<media id="photo" src="./media/photo.png" descriptor="photoDesc"/>	
-		
-		<media id="icon" src="./media/icon.png" descriptor="iconDesc"/>
-		
-		<media id="shoes" src="./media/shoes.mp4" descriptor="shoesDesc"/>
+				
+		<context id="advert">
 			
+			<port id="pIcon" component="icon" />
+			
+			<port id="pShoes" component="shoes"/>
+			
+			<media id="icon" src="./media/icon.png" descriptor="iconDesc"/>
+					
+			<media id="shoes" src="./media/shoes.mp4" descriptor="shoesDesc"/>
+			
+			<link id="lBeginShoes" xconnector="conEx#onKeySelectionStopStart">
+				<bind role="onSelection" component="icon">	
+					<bindParam name="keyCode" value="RED"/>				
+				</bind>
+				<bind role="start" component="shoes"/>
+				<bind role="stop" component="icon"/>
+			</link>
+		</context>
 
 		<link id="lMusic" xconnector="conEx#onBeginStart_delay"><!--Define Relacionamentos-->
 			<bind role="onBegin" component="animation"/>
@@ -80,27 +94,23 @@
 
 		<link id="lIcon" xconnector="conEx#onBeginStart">
 			<bind role="onBegin" component="animation" interface="segIcon"/>
-			<bind role="start" component="icon" />			
+			<bind role="start" component="advert" interface="pIcon" />			
 		</link>	
 		
-		<link id="lAdvert" xconnector="conEx#onKeySelectionStopSet_varStart">
-			<bind role="onSelection" component="icon">
+		<link id="lAdvert" xconnector="conEx#onKeySelectionSet_var">
+			<bind role="onSelection" component="advert" interface="pIcon">
 				<bindParam name="keyCode" value="RED"/>
 			</bind>		
-			<bind role="stop" component="icon" />		
 			<bind role="set" component="animation" interface="bounds">
 				<bindParam name="var" value="5%,6.67%,45%,45%"/>
-			</bind>				
-			<bind role="start" component="shoes" />	
-				
+			</bind>			
 		</link>	
 		
 		<link id="lEndAdvert" xconnector="conEx#onEndSet_var">
-			<bind role="onEnd" component="shoes" />
+			<bind role="onEnd" component="advert" interface="pShoes" />
 			<bind role="set" component="animation" interface="bounds">
 				<bindParam name="var" value="0,0,100%,100%"/>
-			</bind>
-				
+			</bind>				
 			
 		</link>
 	</body>
