@@ -3,15 +3,17 @@
 <ncl id="return" xmlns="http://www.ncl.org.br/NCL3.0/EDTVProfile">
 	<head>
 		
-		<regionBase>	
-			<region id="backgroungReg" width="100%" height="100%" zIndex="1"/>		
+		<regionBase>						
 			<region id="screemReg" width="100%" height="100%" zIndex="2">
 				<region id="frameReg" left="5%" top="6.7%" width="18.5%" height="18.5%" zIndex="3"/>
-				<region id="iconReg" left="87.5%" top="11.7%" width="8.45%" height="6.7%" zIndex="3"/>
-				<region id="shoesReg" left="15%" top="60%" width="25%" height="25%" zIndex="3"/>
-				<region id="formReg" left="56.25%" top="8.33%" width="38.75%" height="71.7%" zIndex="3">
-					
-				</region>
+				<region id="iconReg" left="87.5%" top="11.7%" width="8.45%" height="6.7%" zIndex="3"/>				
+			</region>				
+		</regionBase>
+		
+		<regionBase device="systemScreen(1)">
+			<region id="backgroungReg" width="100%" height="100%" zIndex="1">
+				<region id="shoesReg" left="0" top="25%" width="50%" height="50%" zIndex="2"/>
+				<region id="formReg" left="50%" top="0" width="50%" height="100%" zIndex="2"/>				
 			</region>				
 		</regionBase>
 		
@@ -23,7 +25,7 @@
 			<descriptor id="dribleDesc" region="frameReg"/>
 			<descriptor id="iconDesc" region="iconReg" explicitDur="6s"/>
 			<descriptor id="shoesDesc" region="shoesReg"/>
-			<descriptor id="formDesc" region="formReg" focusIndex="1" explicitDur="40s">
+			<descriptor id="formDesc" region="formReg" focusIndex="1" explicitDur="15s">
 				
 			</descriptor>
 		</descriptorBase>
@@ -69,15 +71,12 @@
 				<bind role="start" component="icon"/>			
 			</link>
 			
-			<link id="lBeginShoes" xconnector="conEx#onKeySelectionStopSet_varStart">
+			<link id="lBeginShoes" xconnector="conEx#onKeySelectionStopStart">
 				<bind role="onSelection" component="icon">	
 					<bindParam name="keyCode" value="RED"/>				
 				</bind>
 				<bind role="start" component="shoes"/>
 				<bind role="start" component="ptForm"/>
-				<bind role="set" component="reusedAnimation" interface="bounds">
-					<bindParam name="var" value="5%,6.67%,45%,45%"/>
-				</bind>
 				<bind role="stop" component="icon"/>
 			</link>
 			
